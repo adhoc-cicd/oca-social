@@ -1,16 +1,11 @@
 /** @odoo-module **/
 
-import {
-    registerClassPatchModel,
-    registerFieldPatchModel,
-    registerInstancePatchModel,
-} from "@mail/model/model_core";
 import {attr} from "@mail/model/model_field";
+import {registerPatch} from "@mail/model/model_core";
 
-registerClassPatchModel(
-    "mail.message",
-    "mail_tracking/static/src/js/mail_tracking.js",
-    {
+registerPatch({
+    name: "Message",
+    modelMethods: {
         convertData(data) {
             const data2 = this._super(data);
             if ("partner_trackings" in data) {
@@ -18,25 +13,11 @@ registerClassPatchModel(
             }
             return data2;
         },
-    }
-);
-
-registerFieldPatchModel(
-    "mail.message",
-    "mail_tracking/static/src/js/mail_tracking.js",
-    {
-        partner_trackings: attr(),
-    }
-);
-
-registerInstancePatchModel(
-    "mail.model",
-    "mail_tracking/static/src/js/mail_tracking.js",
-    {
+    },
+    recordMethods: {
         hasPartnerTrackings() {
-            return _.some(this.__values.partner_trackings);
+            return _.some(this.__values.get("partner_trackings"));
         },
-
         hasEmailCc() {
             return _.some(this._emailCc);
         },
@@ -45,7 +26,10 @@ registerInstancePatchModel(
             if (!this.hasPartnerTrackings()) {
                 return [];
             }
-            return this.__values.partner_trackings;
+            return this.__values.get("partner_trackings");
         },
-    }
-);
+    },
+    fields: {
+        partner_trackings: attr(),
+    },
+});

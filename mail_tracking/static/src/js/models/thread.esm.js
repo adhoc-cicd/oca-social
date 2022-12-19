@@ -1,15 +1,21 @@
 /** @odoo-module **/
-import {registerNewModel} from "@mail/model/model_core";
-import {attr, many2one} from "@mail/model/model_field";
 
-function factory(dependencies) {
-    class MessageFailed extends dependencies["mail.model"] {
-        static convertData(data) {
+import {attr, many} from "@mail/model/model_field";
+import {registerModel} from "@mail/model/model_core";
+
+registerModel({
+    name: "MessageFailed",
+    modelMethods: {
+        /**
+         * @param {Object} data
+         * @returns {Object}
+         */
+        convertData(data) {
             const data2 = {};
             if ("author" in data) {
                 if (!data.author) {
                     data2.author = [["unlink-all"]];
-                } else {
+                } else if (data.author) {
                     data2.author = data.author[1];
                     data2.author_id = data.author[0];
                 }
@@ -27,11 +33,10 @@ function factory(dependencies) {
                 data2.id = data.id;
             }
             return data2;
-        }
-    }
-
-    MessageFailed.fields = {
-        thread: many2one("mail.thread", {
+        },
+    },
+    fields: {
+        thread: many("Thread", {
             inverse: "messagefailed",
         }),
         body: attr(),
@@ -43,11 +48,5 @@ function factory(dependencies) {
             readonly: true,
             required: true,
         }),
-    };
-
-    MessageFailed.modelName = "mail.message.failed";
-    MessageFailed.identifyingFields = ["id"];
-    return MessageFailed;
-}
-
-registerNewModel("mail.message.failed", factory);
+    },
+});

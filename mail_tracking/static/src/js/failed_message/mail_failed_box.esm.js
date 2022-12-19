@@ -6,10 +6,6 @@ import {registerMessagingComponent} from "@mail/utils/messaging_component";
 const {Component} = owl;
 
 export class MessageFailedBox extends Component {
-    constructor(...args) {
-        super(...args);
-    }
-
     //    Get chatter() {
     //        return this.env.models["mail.chatter"].get(this.props.chatterLocalId);
     //    }
