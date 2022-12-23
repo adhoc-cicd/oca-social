@@ -6,15 +6,11 @@ import {registerMessagingComponent} from "@mail/utils/messaging_component";
 const {Component} = owl;
 
 export class MessageFailedBox extends Component {
-    //    Get chatter() {
-    //        return this.env.models["mail.chatter"].get(this.props.chatterLocalId);
-    //    }
-
     _onClickTitle() {
         this.chatter.toggleMessageFailedBoxVisibility();
     }
     _markFailedMessageReviewed(id) {
-        return this.env.services.rpc({
+        return this.messaging.rpc({
             model: "mail.message",
             method: "set_need_action_done",
             args: [[id]],
@@ -49,9 +45,7 @@ export class MessageFailedBox extends Component {
 }
 
 Object.assign(MessageFailedBox, {
-    props: {
-        chatterLocalId: String,
-    },
+    props: {record: Object},
     template: "mail_tracking.MessageFailedBox",
 });
 
