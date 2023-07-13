@@ -64,7 +64,7 @@ class MailTrackingController(main.MailTrackingController):
         # See https://documentation.mailgun.com/en/latest/user_manual.html#routes
         try:
             self._mail_tracking_mailgun_webhook_verify(
-                **request.jsonrequest["signature"]
+                **request.dispatcher.jsonrequest["signature"]
             )
         except ValidationError as error:
             raise NotAcceptable from error
