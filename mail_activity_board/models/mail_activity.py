@@ -85,11 +85,10 @@ class MailActivity(models.Model):
     @api.model
     def _search(
         self,
-        args,
+        domain,
         offset=0,
         limit=None,
         order=None,
-        count=False,
         access_rights_uid=None,
     ):
         # The mail.activity model has a custom search view which removes records from
@@ -105,11 +104,10 @@ class MailActivity(models.Model):
         # and applying the limit after the access rights filtering has been applied.
 
         result = super()._search(
-            args,
+            domain,
             offset=offset,
             limit=None,
             order=order,
-            count=count,
             access_rights_uid=access_rights_uid,
         )
         if limit is not None:
