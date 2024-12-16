@@ -48,7 +48,12 @@ class TestMailCcBcc(TestMailComposer):
         """Test that copied upstream function hasn't received fixes"""
         func = inspect.getsource(upstream._send).encode()
         func_hash = hashlib.md5(func).hexdigest()
-        self.assertIn(func_hash, VALID_HASHES)
+        self.assertIn(
+            func_hash,
+            VALID_HASHES,
+            "mail.mail#_send has changed in upstream, "
+            "please adapt the override and add the new hash above",
+        )
 
     def test_email_cc_bcc(self):
         form = self.open_mail_composer_form()
